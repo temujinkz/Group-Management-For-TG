@@ -20,19 +20,19 @@ from telegram.ext.dispatcher import DispatcherHandlerStop
 from telegram.utils.helpers import escape_markdown
 from telethon import __version__ as tver
 
-import Exon.modules.no_sql.users_db as sql
-from Exon import Abishnoi as pbot
-from Exon import BOT_USERNAME
-from Exon import LOGGER as log
-from Exon import OWNER_ID, OWNER_USERNAME, SUPPORT_CHAT, TOKEN
-from Exon import StartTime, dispatcher, telethn, updater
+import Hemal.modules.no_sql.users_db as sql
+from Hemal import Abishnoi as pbot
+from Hemal import BOT_USERNAME
+from Hemal import LOGGER as log
+from Hemal import OWNER_ID, OWNER_USERNAME, SUPPORT_CHAT, TOKEN
+from Hemal import StartTime, dispatcher, telethn, updater
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from Exon.modules import ALL_MODULES
-from Exon.modules.helper_funcs.chat_status import is_user_admin
-from Exon.modules.helper_funcs.decorators import Exoncallback, Exoncmd, Exonmsg
-from Exon.modules.helper_funcs.misc import paginate_modules
-from Exon.modules.language import gs
+from Hemal.modules import ALL_MODULES
+from Hemal.modules.helper_funcs.chat_status import is_user_admin
+from Hemal.modules.helper_funcs.decorators import Hemalcallback, Hemalcmd, Hemalmsg
+from Hemal.modules.helper_funcs.misc import paginate_modules
+from Hemal.modules.language import gs
 
 PM_START_TEX = """
 ʜᴇʟʟᴏ `{}`, ʜᴏᴡ ᴀʀᴇ ʏᴏᴜ \nᴡᴀɪᴛ ᴀ ᴍᴏᴍᴇɴᴛ ʙʀᴏ . . . 
@@ -68,7 +68,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(f"Exon.modules.{module_name}")
+    imported_module = importlib.import_module(f"Hemal.modules.{module_name}")
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
@@ -124,7 +124,7 @@ def send_help(chat_id, text, keyboard=None):
     )
 
 
-@Exoncmd(command="text")
+@Hemalcmd(command="text")
 def test(update: Update, context: CallbackContext):
     """#TODO
 
@@ -138,8 +138,8 @@ def test(update: Update, context: CallbackContext):
     print(update.effective_message)
 
 
-@Exoncallback(pattern=r"start_back")
-@Exoncmd(command="start", pass_args=True)
+@Hemalcallback(pattern=r"start_back")
+@Hemalcmd(command="start", pass_args=True)
 def start(update: Update, context: CallbackContext):  # sourcery no-metrics
     """#TODO
 
@@ -290,7 +290,7 @@ def error_callback(_, context: CallbackContext):
         # handle all other telegram related errors
 
 
-@Exoncallback(pattern=r"help_")
+@Hemalcallback(pattern=r"help_")
 def help_button(update: Update, context: CallbackContext):
     """#TODO
 
@@ -335,7 +335,7 @@ def help_button(update: Update, context: CallbackContext):
         elif prev_match:
             curr_page = int(prev_match[1])
             kb = paginate_modules(curr_page - 1, HELPABLE, "help")
-            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Exon'),
+            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Hemal'),
             #           InlineKeyboardButton(text='Back', callback_data='start_back'),
             #           InlineKeyboardButton(text="Try inline", switch_inline_query_current_chat="")])
             query.message.edit_text(
@@ -347,7 +347,7 @@ def help_button(update: Update, context: CallbackContext):
         elif next_match:
             next_page = int(next_match[1])
             kb = paginate_modules(next_page + 1, HELPABLE, "help")
-            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Exon'),
+            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Hemal'),
             #           InlineKeyboardButton(text='Back', callback_data='start_back'),
             #           InlineKeyboardButton(text="Try inline", switch_inline_query_current_chat="")])
             query.message.edit_text(
@@ -358,7 +358,7 @@ def help_button(update: Update, context: CallbackContext):
 
         elif back_match:
             kb = paginate_modules(0, HELPABLE, "help")
-            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Exon'),
+            # kb.append([InlineKeyboardButton(text='Support', url='https://t.me/Hemal'),
             #           InlineKeyboardButton(text='Back', callback_data='start_back'),
             #           InlineKeyboardButton(text="Try inline", switch_inline_query_current_chat="")])
             query.message.edit_text(
@@ -375,7 +375,7 @@ def help_button(update: Update, context: CallbackContext):
         pass
 
 
-@Exoncmd(command="help")
+@Hemalcmd(command="help")
 def get_help(update: Update, context: CallbackContext):
     """#TODO
 
@@ -504,7 +504,7 @@ def send_settings(chat_id: int, user_id: int, user=False):
         )
 
 
-@Exoncallback(pattern=r"stngs_")
+@Hemalcallback(pattern=r"stngs_")
 def settings_button(update: Update, context: CallbackContext):
     """#TODO
 
@@ -590,7 +590,7 @@ def settings_button(update: Update, context: CallbackContext):
             log.exception("ᴇxᴄᴇᴘᴛɪᴏɴ ɪɴ sᴇᴛᴛɪɴɢs ʙᴜᴛᴛᴏɴs. %s", str(query.data))
 
 
-@Exoncmd(command="settings")
+@Hemalcmd(command="settings")
 def get_settings(update: Update, context: CallbackContext):
     """#TODO
 
@@ -626,7 +626,7 @@ def get_settings(update: Update, context: CallbackContext):
         text = "ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴄʜᴇᴄᴋ ʏᴏᴜʀ sᴇᴛᴛɪɴɢs."
 
 
-@Exonmsg(Filters.status_update.migrate)
+@Hemalmsg(Filters.status_update.migrate)
 def migrate_chats(update: Update, context: CallbackContext):
     """#TODO
 
